@@ -74,11 +74,10 @@ public class BeanService extends Service {
 
             @Override
             public void onScratchValueChanged(int i, byte[] bytes) {
-                int[] result = new int[5];
+                int[] result = new int[bytes.length/2];
                 for (int n = 0; n < bytes.length/2; n++) {
                      result[n] = (bytes[n*2] & 0xff) |
                                 ((bytes[n*2+1] & 0xff) << 8);
-
                 }
 
                 // Send data to activity
