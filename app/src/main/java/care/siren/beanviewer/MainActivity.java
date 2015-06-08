@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
 
                     StringBuilder builder = new StringBuilder();
                     for (int i : result) {
-                        builder.append(i);
+                        builder.append(i/100);
                         builder.append(" ");
                     }
                     scratchText.setText(builder.toString());

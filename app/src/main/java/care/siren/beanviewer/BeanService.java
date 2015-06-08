@@ -31,7 +31,7 @@ public class BeanService extends Service {
             @Override
             public void onBeanDiscovered(Bean bean) {
                 Log.d(TAG, "Discovered: " + bean.getDevice().getName());
-                if (bean.getDevice().getName().equals("SIREN Bean")) {
+                if (bean.getDevice().getName().startsWith("SIREN")) {
                     Log.i(TAG, "Connecting to Bean");
                     mBean = bean;
                     mBean.connect(getApplicationContext(), beanListener);

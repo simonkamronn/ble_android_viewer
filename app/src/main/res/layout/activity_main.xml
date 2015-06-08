@@ -11,5 +11,8 @@
         android:id="@+id/receivedData"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:text="@string/scratch_received" />
+        android:text="@string/scratch_received"
+        android:textAlignment="center"
+        android:textSize="24dp"
+        android:gravity="center_horizontal" />
 </RelativeLayout>
