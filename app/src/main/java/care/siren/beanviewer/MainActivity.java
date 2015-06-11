@@ -21,11 +21,13 @@ public class MainActivity extends ActionBarActivity {
     BeanService beanService;
     boolean mBound = false;
     TextView scratchText;
+    TextView beanName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        beanName = (TextView) findViewById(R.id.connected_ble_name);
         scratchText = (TextView) findViewById(R.id.receivedData);
     }
 
@@ -39,7 +41,10 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter intentFilter = new IntentFilter(BeanService.SCRATCH_RECV);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BeanService.SCRATCH_RECV);
+        intentFilter.addAction(BeanService.BLE_CONNECTED);
+        intentFilter.addAction(BeanService.BLE_DISCONNECTED);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -67,12 +72,20 @@ public class MainActivity extends ActionBarActivity {
 
                     StringBuilder builder = new StringBuilder();
                     for (int i : result) {
-                        builder.append(i/100);
+                        builder.append(i);
                         builder.append(" ");
                     }
                     scratchText.setText(builder.toString());
 
                     Log.d(TAG, "Scratch data received: " + builder.toString());
+                    break;
+                case BeanService.BLE_CONNECTED:
+                    String name = intent.getStringExtra("Data");
+                    beanName.setText(name);
+                    break;
+                case BeanService.BLE_DISCONNECTED:
+                    beanName.setText("Not connected");
+                    scratchText.setText("");
                     break;
             }
         }

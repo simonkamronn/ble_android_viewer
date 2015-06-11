@@ -17,8 +17,10 @@ public class BeanService extends Service {
     private final IBinder binder = new LocalBinder();
 
     public static final String SCRATCH_RECV = "Scratch received";
+    public static final String BLE_CONNECTED = "BLE Device connected";
+    public static final String BLE_DISCONNECTED = "BLE Device disconnected";
 
-    Bean mBean;
+    Bean bean;
     BeanListener beanListener;
     BeanDiscoveryListener beanDiscoveryListener;
     String serialMsg = "";
@@ -32,15 +34,16 @@ public class BeanService extends Service {
             public void onBeanDiscovered(Bean bean) {
                 Log.d(TAG, "Discovered: " + bean.getDevice().getName());
                 if (bean.getDevice().getName().startsWith("SIREN")) {
-                    Log.i(TAG, "Connecting to Bean");
-                    mBean = bean;
-                    mBean.connect(getApplicationContext(), beanListener);
+                    BeanService.this.bean = bean;
+                    BeanService.this.bean.connect(getApplicationContext(), beanListener);
                 }
             }
 
             @Override
             public void onDiscoveryComplete(){
-
+                if(bean == null){
+                    BeanManager.getInstance().startDiscovery(beanDiscoveryListener);
+                }
             }
         };
 
@@ -48,6 +51,7 @@ public class BeanService extends Service {
             @Override
             public void onConnected() {
                 Log.i(TAG, "Bean connected");
+                sendMessage(BLE_CONNECTED, bean.getDevice().getName());
             }
 
             @Override
@@ -59,7 +63,7 @@ public class BeanService extends Service {
             @Override
             public void onDisconnected() {
                 Log.i(TAG, "Bean disconnected");
-
+                sendMessage(BLE_DISCONNECTED, bean.getDevice().getName());
             }
 
             @Override
@@ -94,6 +98,12 @@ public class BeanService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    private void sendMessage(String action, String data) {
+        Intent intent = new Intent(action);
+        intent.putExtra("Data", data);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "BeanService started");
@@ -103,9 +113,9 @@ public class BeanService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mBean != null) {
-            if (mBean.isConnected())
-                mBean.disconnect();
+        if (bean != null) {
+            if (bean.isConnected())
+                bean.disconnect();
         }
     }
 
