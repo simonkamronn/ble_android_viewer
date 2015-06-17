@@ -16,12 +16,19 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/scratch_received"
         android:id="@+id/receivedData"
         android:layout_below="@+id/connected_ble_name"
         android:layout_alignParentStart="true"
         android:layout_marginTop="30dp" />
+
+    <lecho.lib.hellocharts.view.LineChartView
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/receivedData"
+        android:layout_marginTop="10dp" />
 </RelativeLayout>

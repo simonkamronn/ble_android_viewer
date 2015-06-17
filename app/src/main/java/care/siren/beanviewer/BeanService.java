@@ -98,6 +98,12 @@ public class BeanService extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    private void sendMessage(String action, double[] data) {
+        Intent intent = new Intent(action);
+        intent.putExtra("Data", data);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
     private void sendMessage(String action, String data) {
         Intent intent = new Intent(action);
         intent.putExtra("Data", data);
