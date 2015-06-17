@@ -131,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
                     StringBuilder builder = new StringBuilder();
                     for (int i : result) {
                         builder.append(String.format("Sensor %d: ", idx++));
-                        builder.append(i/100);
+                        builder.append(i);
                         builder.append("\n");
                     }
                     scratchText.setText(builder.toString());
